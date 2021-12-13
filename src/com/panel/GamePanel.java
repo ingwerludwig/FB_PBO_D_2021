@@ -19,6 +19,7 @@ import javax.swing.JPanel;
 import com.component.Ball;
 import com.component.BallArea;
 import com.util.CountdownTimer;
+import com.util.Score;
 
 
 public class GamePanel extends JPanel implements KeyListener {
@@ -26,8 +27,9 @@ public class GamePanel extends JPanel implements KeyListener {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private int score = 0;
+	
 	private int timeThread = 500;
+	private Score score;
 
 	//refresh rate nya
 	private static final int REFRESH_RATE = 120;
@@ -42,6 +44,9 @@ public class GamePanel extends JPanel implements KeyListener {
 	
 	static CountdownTimer stopwatch;
 	
+	
+	private List<Color> color = new ArrayList<Color>();
+	private Random random = new Random();
 	
 	public GamePanel(int width, int height) {
 		this.addKeyListener(this);
@@ -59,6 +64,15 @@ public class GamePanel extends JPanel implements KeyListener {
 		
 		MouseHandler handler = new MouseHandler();
 		addMouseListener(handler);
+		
+		score = new Score();
+		
+		color.add(new Color(247, 32, 32));
+		color.add(new Color(30,144,255));
+		color.add(new Color(255,255,0));
+		color.add(new Color(127, 0, 255));
+		color.add(new Color(255, 192, 203));
+		color.add(new Color(0,0,0));
 		
 		//cara mendapatkan area latar belakang, jika framenya diresize
 		this.addComponentListener(new ComponentAdapter() {
@@ -83,35 +97,21 @@ public class GamePanel extends JPanel implements KeyListener {
 		return this.areaHeight;
 	}
 	
-	public void setScore() {
-		this.score++;
-		System.out.println("Score : " + this.score);
-	}
-	
 	public void startThread() {
 		Thread gameThread = new Thread() {
 			public void run() {
 				while (true) {
-
-					Random random = new Random();
-					
 					int radius = 100;
 				
 					int x = random.nextInt(getAreaWidth() - radius * 2) + radius + 10;
 					int y = random.nextInt(getAreaHeight() - radius * 2) + radius + 10;
-				
-					List<Color> color = new ArrayList<Color>();
-					color.add(new Color(247, 32, 32));
-					color.add(new Color(30,144,255));
-					color.add(new Color(255,255,0));
-					color.add(new Color(127, 0, 255));
-					color.add(new Color(255, 192, 203));
-					color.add(new Color(0,0,0));
-				
+								
 					int randomColor = random.nextInt(6);
 					
 					if(stopwatch.getInterval() == 1) {
 						stopwatch.stopTime();
+						
+						//kalau waktu abis, exit
 						System.exit(0);
 					}
 					
@@ -184,8 +184,7 @@ public class GamePanel extends JPanel implements KeyListener {
 					if(b.isInClickableArea(e.getX(), e.getY())) {
 						balls.remove(b);
 						
-						
-						setScore();
+						score.increaseScore();
 					}
 				}
 			} catch (Exception err) {
