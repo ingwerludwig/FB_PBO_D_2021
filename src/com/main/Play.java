@@ -1,53 +1,49 @@
 package com.main;
 
 import java.awt.CardLayout;
-
+import javax.swing.BorderFactory;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-
+import javax.swing.SwingUtilities;
 import com.panel.GamePanel;
+import com.panel.HomePanel;
+import com.panel.EndPanel;
 
 public class Play extends JFrame{
-	static int width = 1080;
-	static int height = 720;
-	
-	/**
-	 * 
-	 */
-	//abaikan
 	private static final long serialVersionUID = 1L;
-	
-	
-	//semua component panel yang dibutuhkan untuk game ini
-	static GamePanel gp = new GamePanel(width, height);
-	
-	//end component
-	
-	//Jpanel dan cardLayout 
-	static JPanel cards = new JPanel();
-	static CardLayout c = new CardLayout();
-	//end 
-	
-	
-	//constructor
-	Play() {
-		cards.setLayout(c);
-		
-		//tambahkan setiap component ke sini
-		cards.add(gp, "GamePanel");
-		
-		//c.show() generate pertama kali yang dirender itu apa
-		c.show(cards, "GamePanel");
-		add(cards);
-		
-		setTitle("Stress Ball Game");
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        
-        setSize(width, height); 
-        setVisible(true); 
-	}
-	
-	public static void main(String[] args) {
-		new Play();
-	}
+    private HomePanel panel1;
+    private GamePanel panel2;
+    private EndPanel panel3;
+    
+    private void displayGUI(){
+        JFrame frame = new JFrame("Stress Ball Game");
+        frame.setLayout(null);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        JPanel contentPane = new JPanel();
+        contentPane.setBorder(
+        BorderFactory.createEmptyBorder(5, 5, 5, 5));
+        contentPane.setLayout(new CardLayout());
+        panel1 = new HomePanel(contentPane);
+        panel2 = new GamePanel(contentPane);
+        panel3 = new EndPanel(contentPane);
+        contentPane.add(panel1, "Panel 1");
+//        contentPane.add(panel2, "Panel 2");
+//        contentPane.add(panel3, "Panel 3");
+        frame.setContentPane(contentPane);
+        frame.pack();   
+        frame.setLocationByPlatform(true);
+        frame.setVisible(true);
+    }
+    
+    public static void main(String... args){
+        SwingUtilities.invokeLater(new Runnable()
+        {
+            public void run()
+            {
+                new Play().displayGUI();
+            }
+        });
+    }
+    
 }

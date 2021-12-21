@@ -7,21 +7,22 @@ public class Ball {
 	int x, y;
 	int radius;
 	private Color color;
-	
+	private String colorName;
 
-	public Ball(int x, int y, int radius, Color color) {
+	public Ball(int x, int y, int radius, Color color, String colorName) {
 		this.x = x;
 		this.y = y;
 		
 		this.radius = radius;
 		this.color = color;
 		
+		this.colorName = colorName;
+		
 	}
 	
 	public void draw(Graphics g) {
 		g.setColor(this.color);
 		g.fillOval((int)(x - radius), (int)(y - radius), (int)(2 * radius), (int)(2 * radius));
-
 	}
 
 	public boolean isInClickableArea(int eventX, int eventY) {
@@ -42,6 +43,10 @@ public class Ball {
 		}
 
 		return false;
+	}
+	
+	public String getColorName() {
+		return this.colorName;
 	}
 	
 }
